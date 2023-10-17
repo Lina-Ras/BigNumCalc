@@ -13,11 +13,13 @@ class Colors():
     ScolorMain = f'rgb({Q_ScolorMain.red()}, {Q_ScolorMain.green()}, {Q_ScolorMain.blue()})'
     ScolorDark = f'rgb({Q_ScolorDark.red()}, {Q_ScolorDark.green()}, {Q_ScolorDark.blue()})'
 
+INPUTS = 2
+
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.setStyleSheet(f'background-color: {Colors.ScolorMain};')
-        MainWindow.resize(1000, 478)
+        MainWindow.resize(1000, (INPUTS+1)*120 + 120)
 
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
@@ -27,30 +29,33 @@ class Ui_MainWindow(object):
         font.setPointSize(24)
 
         regex_str = "[-]?([0][,.][0-9]{,6}|"
-        regex_str+="[1]([\s]?[0]{3}){3}[.,][0]{,6}|"
-        regex_str+="[1-9][0-9]{,2}([\s]?[0-9]{3}){,3}[,.][0-9]{,6})"
+        regex_str+="[1]([\s]?[0]{3}){3}[.,][0]{0,6}|"
+        regex_str+="[1-9][0-9]{,2}([\s]?[0-9]{3}){,3}[,.][0-9]{0,6})"
         regex = QtCore.QRegExp(regex_str)
         validator = QtGui.QRegExpValidator(regex)
 
         borderStyleSheet = f'border:5px solid {Colors.ScolorDark};'
         bcInputStyleSheet = f'background-color: {Colors.neutralLight};'
         textStyleSheet = f'color: {Colors.ScolorDark};'
-        self.Input1 = QtWidgets.QLineEdit(self.centralwidget)
-        self.Input1.setGeometry(QtCore.QRect(30, 60, 700, 71))
-        self.Input1.setFont(font)
-        self.Input1.setValidator(validator)
-        self.Input1.setObjectName("Input1")
-        self.Input1.setStyleSheet(borderStyleSheet + bcInputStyleSheet + textStyleSheet)
 
-        self.Input2 = QtWidgets.QLineEdit(self.centralwidget)
-        self.Input2.setGeometry(QtCore.QRect(30, 160, 700, 71))
-        self.Input2.setFont(font)
-        self.Input2.setValidator(validator)
-        self.Input2.setObjectName("Input2")
-        self.Input2.setStyleSheet(borderStyleSheet + bcInputStyleSheet + textStyleSheet)
+        self.Inputs = []
+        for i in range(INPUTS):
+            self.Inputs += [QtWidgets.QLineEdit(self.centralwidget)]
+            self.Inputs[i].setGeometry(QtCore.QRect(30, 120*i + 60, 700, 71))
+            self.Inputs[i].setFont(font)
+            self.Inputs[i].setValidator(validator)
+            self.Inputs[i].setObjectName("Input"+str(i))
+            self.Inputs[i].setStyleSheet(borderStyleSheet + bcInputStyleSheet + textStyleSheet)
+
+        # self.Input2 = QtWidgets.QLineEdit(self.centralwidget)
+        # self.Input2.setGeometry(QtCore.QRect(30, 160, 700, 71))
+        # self.Input2.setFont(font)
+        # self.Input2.setValidator(validator)
+        # self.Input2.setObjectName("Input2")
+        # self.Input2.setStyleSheet(borderStyleSheet + bcInputStyleSheet + textStyleSheet)
 
         self.Output = QtWidgets.QLineEdit(self.centralwidget)
-        self.Output.setGeometry(QtCore.QRect(30, 310, 700, 81))
+        self.Output.setGeometry(QtCore.QRect(30, INPUTS*120 + 100, 700, 81))
         self.Output.setFont(font)
         self.Output.setReadOnly(True)
         self.Output.setValidator(validator)
