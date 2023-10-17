@@ -17,7 +17,7 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.setStyleSheet(f'background-color: {Colors.ScolorMain};')
-        MainWindow.resize(800, 478)
+        MainWindow.resize(1000, 478)
 
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
@@ -26,29 +26,31 @@ class Ui_MainWindow(object):
         font.setFamily("Bauhaus 93")
         font.setPointSize(24)
 
-        regex = QtCore.QRegExp(
-            "[-]?([0][,.][0-9]{,6}|[1][0]{12}[.,][0]{,6}|[1-9][0-9]{,11}[,.][0-9]{,6})")
+        regex_str = "[-]?([0][,.][0-9]{,6}|"
+        regex_str+="[1]([\s]?[0]{3}){3}[.,][0]{,6}|"
+        regex_str+="[1-9][0-9]{,2}([\s]?[0-9]{3}){,3}[,.][0-9]{,6})"
+        regex = QtCore.QRegExp(regex_str)
         validator = QtGui.QRegExpValidator(regex)
 
         borderStyleSheet = f'border:5px solid {Colors.ScolorDark};'
         bcInputStyleSheet = f'background-color: {Colors.neutralLight};'
         textStyleSheet = f'color: {Colors.ScolorDark};'
         self.Input1 = QtWidgets.QLineEdit(self.centralwidget)
-        self.Input1.setGeometry(QtCore.QRect(30, 60, 511, 71))
+        self.Input1.setGeometry(QtCore.QRect(30, 60, 700, 71))
         self.Input1.setFont(font)
         self.Input1.setValidator(validator)
         self.Input1.setObjectName("Input1")
         self.Input1.setStyleSheet(borderStyleSheet + bcInputStyleSheet + textStyleSheet)
 
         self.Input2 = QtWidgets.QLineEdit(self.centralwidget)
-        self.Input2.setGeometry(QtCore.QRect(30, 160, 511, 71))
+        self.Input2.setGeometry(QtCore.QRect(30, 160, 700, 71))
         self.Input2.setFont(font)
         self.Input2.setValidator(validator)
         self.Input2.setObjectName("Input2")
         self.Input2.setStyleSheet(borderStyleSheet + bcInputStyleSheet + textStyleSheet)
 
         self.Output = QtWidgets.QLineEdit(self.centralwidget)
-        self.Output.setGeometry(QtCore.QRect(30, 310, 511, 81))
+        self.Output.setGeometry(QtCore.QRect(30, 310, 700, 81))
         self.Output.setFont(font)
         self.Output.setReadOnly(True)
         self.Output.setValidator(validator)
@@ -63,21 +65,35 @@ class Ui_MainWindow(object):
                                         border: 3px solid {Colors.ScolorDark};\
                                         {textStyleSheet}}}'
         self.Plus = QtWidgets.QPushButton(self.centralwidget)
-        self.Plus.setGeometry(QtCore.QRect(600, 70, 131, 51))
+        self.Plus.setGeometry(QtCore.QRect(800, 70, 131, 51))
         self.Plus.setFont(font)
         self.Plus.setObjectName("Plus")
         self.Plus.setStyleSheet(buttonStyleSheet)
         self.Plus.setText("+")
 
         self.Minus = QtWidgets.QPushButton(self.centralwidget)
-        self.Minus.setGeometry(QtCore.QRect(600, 160, 131, 51))
+        self.Minus.setGeometry(QtCore.QRect(800, 130, 131, 51))
         self.Minus.setFont(font)
         self.Minus.setObjectName("Minus")
         self.Minus.setStyleSheet(buttonStyleSheet)
         self.Minus.setText("-")
+
+        self.Multipl = QtWidgets.QPushButton(self.centralwidget)
+        self.Multipl.setGeometry(QtCore.QRect(800, 190, 131, 51))
+        self.Multipl.setFont(font)
+        self.Multipl.setObjectName("Multipl")
+        self.Multipl.setStyleSheet(buttonStyleSheet)
+        self.Multipl.setText("*")
+
+        self.Division = QtWidgets.QPushButton(self.centralwidget)
+        self.Division.setGeometry(QtCore.QRect(800, 250, 131, 51))
+        self.Division.setFont(font)
+        self.Division.setObjectName("Division")
+        self.Division.setStyleSheet(buttonStyleSheet)
+        self.Division.setText("/")
         
         self.textBrowser = QtWidgets.QTextBrowser(self.centralwidget)
-        self.textBrowser.setGeometry(QtCore.QRect(620, 350, 171, 120))
+        self.textBrowser.setGeometry(QtCore.QRect(800, 350, 171, 120))
         font = QtGui.QFont()
         font.setFamily("Cambria")
         font.setPointSize(10)
