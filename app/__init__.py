@@ -18,7 +18,10 @@ def CheckCorrectString(inp_str: str) -> [bool, str]:
     
 def GetCorrectString(res):
     res = res.replace(' ', '')
-    main_part, float_part = res.split('.')
+    if res.find('.') > -1:
+        main_part, float_part = res.split('.')
+    else:
+        main_part, float_part = res, '0'
 
     output = ''
     i = len(main_part)
@@ -45,10 +48,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         self.setupUi(self)
 
-        self.Plus.clicked.connect(self.PlusClickedEvent)
-        self.Minus.clicked.connect(self.MinusClickedEvent)
-        self.Multipl.clicked.connect(self.MultiplClickedEvent)
-        self.Division.clicked.connect(self.DivisionClickedEvent)
+        self.Result_btn.clicked.connect(self.Calculate)
+        self.Round_btn.clicked.connect(self.Round)
 
 
     def GetInputs(self):
@@ -64,33 +65,53 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             dec += [dc.Decimal(inp)]
         return dec
 
-    def ClickedEvent(self, lam):
-        dec = self.GetInputs()
-        if dec == None:
-            return
+# ['Матэматычнае', 'Бухгалтарскае', 'Усячэнне']
+    def Round(self):
+        self.RoundOutput.clear()
+        out = dc.Decimal(self.Output.text())
+        round_method = self.CBRound.currentIndex()
+        if round_method == 0:
+            out = out.quantize(dc.Decimal('1'), dc.ROUND_HALF_UP)
+        elif round_method == 1:
+            out = out.quantize(dc.Decimal('1'))
+        elif round_method == 2:
+            out = out // 1
+        self.RoundOutput.insert(GetCorrectString(out.to_eng_string()))
+
+    def Calculate(self):
         self.Output.clear()
-        res = lam(dec[0], dec[1])
-        if res >= self.MINVALUE and res <= self.MAXVALUE:
-            res = res.quantize(dc.Decimal('1.000000'), dc.ROUND_HALF_UP)
-            self.Output.insert(GetCorrectString(res.to_eng_string()))
-        else:
-            self.ErrorMessage.warning(self.centralwidget, 'Папярэджванне', "Рэзультат выходзіць па-за межы падтрымліваемых лічбаў")
+        self.RoundOutput.clear()
+        inps = self.GetInputs()
+        ops = [combx.currentText() for combx in self.ComboBoxes]
+        res = self.Operation(ops[1], inps[1], inps[2])
+        if res != None:
+            if (ops[2] == '*' or ops[2] == '/') and (ops[0] == '+' or ops[0] == '-'):
+                res = self.Operation(ops[2], res, inps[3])
+                if res != None:
+                    res = self.Operation(ops[0], inps[0], res)
+            else:
+                res = self.Operation(ops[0], inps[0], res)
+                if res != None:
+                    res = self.Operation(ops[2], res, inps[3])
+            if res != None:
+                res = res.quantize(dc.Decimal('1.000000'), dc.ROUND_HALF_UP)
+                self.Output.insert(GetCorrectString(res.to_eng_string()))
 
-    def PlusClickedEvent(self):
-        self.ClickedEvent(lambda x, y: x+y)
-
-    def MinusClickedEvent(self):
-        self.ClickedEvent(lambda x, y: x-y)
-
-    def MultiplClickedEvent(self):
-        self.ClickedEvent(lambda x, y: x*y)
-
-    def DivisionClickedEvent(self):
-        dec = self.GetInputs()
-        if dec == None:
-            return
-        for i in range(1, len(self.Inputs)):
-            if dec[i] == 0:
+    def Operation(self, op, x, y):
+        if op == '+':
+            def lam(x, y): return x+y
+        elif op == '-':
+            def lam(x, y): return x-y
+        elif op == '*':
+            def lam(x, y): return x*y
+        elif op == '/':
+            if y == 0:
                 self.ErrorMessage.warning(self.centralwidget, 'Папярэджванне', "Дзяленне на ноль")
                 return
-        self.ClickedEvent(lambda x, y: x/y)
+            def lam(x, y): return x/y
+        res = lam(x, y)
+        if res >= self.MINVALUE and res <= self.MAXVALUE:
+            return res.quantize(dc.Decimal('1.0000000000'), dc.ROUND_HALF_UP)  
+        else:
+            self.ErrorMessage.warning(self.centralwidget, 'Папярэджванне', "Рэзультат выходзіць па-за межы падтрымліваемых лічбаў")
+            return None

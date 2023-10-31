@@ -13,13 +13,14 @@ class Colors():
     ScolorMain = f'rgb({Q_ScolorMain.red()}, {Q_ScolorMain.green()}, {Q_ScolorMain.blue()})'
     ScolorDark = f'rgb({Q_ScolorDark.red()}, {Q_ScolorDark.green()}, {Q_ScolorDark.blue()})'
 
-INPUTS = 2
+INPUTS = 4
+OPERATIONS = ['+', '-', '*', '/']
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.setStyleSheet(f'background-color: {Colors.ScolorMain};')
-        MainWindow.resize(1000, (INPUTS+1)*120 + 120)
+        MainWindow.resize(760, (INPUTS+3)*120 + 100)
 
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
@@ -37,25 +38,27 @@ class Ui_MainWindow(object):
         borderStyleSheet = f'border:5px solid {Colors.ScolorDark};'
         bcInputStyleSheet = f'background-color: {Colors.neutralLight};'
         textStyleSheet = f'color: {Colors.ScolorDark};'
+        textStyleSheetCenter = f'color: {Colors.ScolorDark}; text-align: center;'
 
         self.Inputs = []
+        self.ComboBoxes = []
         for i in range(INPUTS):
             self.Inputs += [QtWidgets.QLineEdit(self.centralwidget)]
-            self.Inputs[i].setGeometry(QtCore.QRect(30, 120*i + 60, 700, 71))
+            self.Inputs[i].setGeometry(QtCore.QRect(30, 120*i + 60, 700, 70))
             self.Inputs[i].setFont(font)
             self.Inputs[i].setValidator(validator)
             self.Inputs[i].setObjectName("Input"+str(i))
             self.Inputs[i].setStyleSheet(borderStyleSheet + bcInputStyleSheet + textStyleSheet)
+            self.Inputs[i].setText('0')
 
-        # self.Input2 = QtWidgets.QLineEdit(self.centralwidget)
-        # self.Input2.setGeometry(QtCore.QRect(30, 160, 700, 71))
-        # self.Input2.setFont(font)
-        # self.Input2.setValidator(validator)
-        # self.Input2.setObjectName("Input2")
-        # self.Input2.setStyleSheet(borderStyleSheet + bcInputStyleSheet + textStyleSheet)
+            if i != INPUTS-1:
+                self.ComboBoxes += [QtWidgets.QComboBox(self.centralwidget)]
+                self.ComboBoxes[i].setGeometry(QtCore.QRect(345, 120*(i+1) + 15, 70, 40))
+                self.ComboBoxes[i].setStyleSheet(borderStyleSheet + bcInputStyleSheet + textStyleSheetCenter)
+                self.ComboBoxes[i].addItems(OPERATIONS)   
 
         self.Output = QtWidgets.QLineEdit(self.centralwidget)
-        self.Output.setGeometry(QtCore.QRect(30, INPUTS*120 + 100, 700, 81))
+        self.Output.setGeometry(QtCore.QRect(30, INPUTS*120 + 100, 700, 80))
         self.Output.setFont(font)
         self.Output.setReadOnly(True)
         self.Output.setValidator(validator)
@@ -69,48 +72,49 @@ class Ui_MainWindow(object):
                              QPushButton::pressed{{background-color: {Colors.FcolorMain};\
                                         border: 3px solid {Colors.ScolorDark};\
                                         {textStyleSheet}}}'
-        self.Plus = QtWidgets.QPushButton(self.centralwidget)
-        self.Plus.setGeometry(QtCore.QRect(800, 70, 131, 51))
-        self.Plus.setFont(font)
-        self.Plus.setObjectName("Plus")
-        self.Plus.setStyleSheet(buttonStyleSheet)
-        self.Plus.setText("+")
-
-        self.Minus = QtWidgets.QPushButton(self.centralwidget)
-        self.Minus.setGeometry(QtCore.QRect(800, 130, 131, 51))
-        self.Minus.setFont(font)
-        self.Minus.setObjectName("Minus")
-        self.Minus.setStyleSheet(buttonStyleSheet)
-        self.Minus.setText("-")
-
-        self.Multipl = QtWidgets.QPushButton(self.centralwidget)
-        self.Multipl.setGeometry(QtCore.QRect(800, 190, 131, 51))
-        self.Multipl.setFont(font)
-        self.Multipl.setObjectName("Multipl")
-        self.Multipl.setStyleSheet(buttonStyleSheet)
-        self.Multipl.setText("*")
-
-        self.Division = QtWidgets.QPushButton(self.centralwidget)
-        self.Division.setGeometry(QtCore.QRect(800, 250, 131, 51))
-        self.Division.setFont(font)
-        self.Division.setObjectName("Division")
-        self.Division.setStyleSheet(buttonStyleSheet)
-        self.Division.setText("/")
         
+        self.Result_btn = QtWidgets.QPushButton(self.centralwidget)
+        self.Result_btn.setGeometry(QtCore.QRect(315, 120*INPUTS + 30, 130, 50))
+        self.Result_btn.setFont(font)
+        self.Result_btn.setObjectName("Result")
+        self.Result_btn.setStyleSheet(buttonStyleSheet)
+        self.Result_btn.setText("=")
+
+        self.RoundOutput = QtWidgets.QLineEdit(self.centralwidget)
+        self.RoundOutput.setGeometry(QtCore.QRect(30, (INPUTS+2)*120 + 30, 700, 80))
+        self.RoundOutput.setFont(font)
+        self.RoundOutput.setReadOnly(True)
+        self.RoundOutput.setValidator(validator)
+        self.RoundOutput.setObjectName("Output")
+        self.RoundOutput.setStyleSheet(borderStyleSheet + bcInputStyleSheet + textStyleSheet)
+
+        self.CBRound = QtWidgets.QComboBox(self.centralwidget)
+        self.CBRound.setGeometry(QtCore.QRect(220, 120*(INPUTS+1) + 75, 130, 50))
+        self.CBRound.setStyleSheet(borderStyleSheet + bcInputStyleSheet + textStyleSheetCenter)
+        self.CBRound.addItems(['Матэматычнае', 'Бухгалтарскае', 'Усячэнне'])
+
+        self.Round_btn = QtWidgets.QPushButton(self.centralwidget)
+        self.Round_btn.setGeometry(QtCore.QRect(220 + 130 + 60, 120*(INPUTS+1) + 75, 130, 50))
+        font.setPointSize(14)
+        self.Round_btn.setFont(font)
+        self.Round_btn.setObjectName("Round")
+        self.Round_btn.setStyleSheet(buttonStyleSheet)
+        self.Round_btn.setText("Акругліць")
+
         self.textBrowser = QtWidgets.QTextBrowser(self.centralwidget)
-        self.textBrowser.setGeometry(QtCore.QRect(800, 350, 171, 120))
+        self.textBrowser.setGeometry(QtCore.QRect(150, (INPUTS+3)*120, 700, 120))
         font = QtGui.QFont()
-        font.setFamily("Cambria")
-        font.setPointSize(10)
+        font.setPointSize(14)
         font.setBold(True)
         font.setItalic(True)
         font.setWeight(75)
         self.textBrowser.setFont(font)
+        self.textBrowser.setStyleSheet(textStyleSheetCenter)
         self.textBrowser.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.textBrowser.setOpenExternalLinks(True)
         self.textBrowser.setReadOnly(True)
         self.textBrowser.setObjectName("textBrowser")
-        self.textBrowser.setText("Пашкавец\nАнгеліна\nАляксандраўна\n4к, 4гр, 2023\n")
+        self.textBrowser.setText("Пашкавец Ангеліна Аляксандраўна 4к, 4гр, 2023\n")
 
         MainWindow.setCentralWidget(self.centralwidget)
 
