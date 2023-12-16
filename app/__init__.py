@@ -68,7 +68,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 # ['Матэматычнае', 'Бухгалтарскае', 'Усячэнне']
     def Round(self):
         self.RoundOutput.clear()
-        out = dc.Decimal(self.Output.text())
+        if self.Output.text() == '':
+            return
+        out = dc.Decimal(self.Output.text().replace(' ', ''))
         round_method = self.CBRound.currentIndex()
         if round_method == 0:
             out = out.quantize(dc.Decimal('1'), dc.ROUND_HALF_UP)
