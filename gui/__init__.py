@@ -20,7 +20,7 @@ class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.setStyleSheet(f'background-color: {Colors.ScolorMain};')
-        MainWindow.resize(760, (INPUTS+3)*120 + 100)
+        MainWindow.resize(850, (INPUTS+3)*150 + 150)
 
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
@@ -44,7 +44,7 @@ class Ui_MainWindow(object):
         self.ComboBoxes = []
         for i in range(INPUTS):
             self.Inputs += [QtWidgets.QLineEdit(self.centralwidget)]
-            self.Inputs[i].setGeometry(QtCore.QRect(30, 120*i + 60, 700, 70))
+            self.Inputs[i].setGeometry(QtCore.QRect(30, 150*i + 80, 750, 70))
             self.Inputs[i].setFont(font)
             self.Inputs[i].setValidator(validator)
             self.Inputs[i].setObjectName("Input"+str(i))
@@ -53,12 +53,12 @@ class Ui_MainWindow(object):
 
             if i != INPUTS-1:
                 self.ComboBoxes += [QtWidgets.QComboBox(self.centralwidget)]
-                self.ComboBoxes[i].setGeometry(QtCore.QRect(345, 120*(i+1) + 15, 70, 40))
+                self.ComboBoxes[i].setGeometry(QtCore.QRect(345, 150*(i+1) + 15, 70, 50))
                 self.ComboBoxes[i].setStyleSheet(borderStyleSheet + bcInputStyleSheet + textStyleSheetCenter)
                 self.ComboBoxes[i].addItems(OPERATIONS)   
 
         self.Output = QtWidgets.QLineEdit(self.centralwidget)
-        self.Output.setGeometry(QtCore.QRect(30, INPUTS*120 + 100, 700, 80))
+        self.Output.setGeometry(QtCore.QRect(30, INPUTS*150 + 100, 750, 70))
         self.Output.setFont(font)
         self.Output.setReadOnly(True)
         self.Output.setValidator(validator)
@@ -74,27 +74,27 @@ class Ui_MainWindow(object):
                                         {textStyleSheet}}}'
         
         self.Result_btn = QtWidgets.QPushButton(self.centralwidget)
-        self.Result_btn.setGeometry(QtCore.QRect(315, 120*INPUTS + 30, 130, 50))
+        self.Result_btn.setGeometry(QtCore.QRect(315, 150*INPUTS + 30, 130, 50))
         self.Result_btn.setFont(font)
         self.Result_btn.setObjectName("Result")
         self.Result_btn.setStyleSheet(buttonStyleSheet)
         self.Result_btn.setText("=")
 
         self.RoundOutput = QtWidgets.QLineEdit(self.centralwidget)
-        self.RoundOutput.setGeometry(QtCore.QRect(30, (INPUTS+2)*120 + 30, 700, 80))
+        self.RoundOutput.setGeometry(QtCore.QRect(30, (INPUTS+2)*150 + 30, 750, 80))
         self.RoundOutput.setFont(font)
         self.RoundOutput.setReadOnly(True)
         self.RoundOutput.setValidator(validator)
-        self.RoundOutput.setObjectName("Output")
+        self.RoundOutput.setObjectName("Round Output")
         self.RoundOutput.setStyleSheet(borderStyleSheet + bcInputStyleSheet + textStyleSheet)
 
         self.CBRound = QtWidgets.QComboBox(self.centralwidget)
-        self.CBRound.setGeometry(QtCore.QRect(220, 120*(INPUTS+1) + 75, 130, 50))
+        self.CBRound.setGeometry(QtCore.QRect(220, 150*(INPUTS+1) + 75, 190, 80))
         self.CBRound.setStyleSheet(borderStyleSheet + bcInputStyleSheet + textStyleSheetCenter)
         self.CBRound.addItems(['Матэматычнае', 'Бухгалтарскае', 'Усячэнне'])
 
         self.Round_btn = QtWidgets.QPushButton(self.centralwidget)
-        self.Round_btn.setGeometry(QtCore.QRect(220 + 130 + 60, 120*(INPUTS+1) + 75, 130, 50))
+        self.Round_btn.setGeometry(QtCore.QRect(220 + 190 + 60, 150*(INPUTS+1) + 75, 180, 80))
         font.setPointSize(14)
         self.Round_btn.setFont(font)
         self.Round_btn.setObjectName("Round")
@@ -102,7 +102,7 @@ class Ui_MainWindow(object):
         self.Round_btn.setText("Акругліць")
 
         self.textBrowser = QtWidgets.QTextBrowser(self.centralwidget)
-        self.textBrowser.setGeometry(QtCore.QRect(150, (INPUTS+3)*120, 700, 120))
+        self.textBrowser.setGeometry(QtCore.QRect(150, (INPUTS+3)*150, 700, 100))
         font = QtGui.QFont()
         font.setPointSize(14)
         font.setBold(True)
